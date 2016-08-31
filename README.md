@@ -1,4 +1,4 @@
-# Rebus.TODO
+# Rebus.Log4net
 
 Provides a Log4net logger integration for [Rebus](https://github.com/rebus-org/Rebus).
 
