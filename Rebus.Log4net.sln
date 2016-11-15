@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "stuff", "stuff", "{1ABDD7C1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebus.Log4net", "Rebus.Log4net\Rebus.Log4net.csproj", "{9EDA7793-8E2E-47A3-9511-5D40FD0B958C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "TestApplication\TestApplication.csproj", "{F4A23671-2AE8-4A43-8A7D-841F16E1544C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{9EDA7793-8E2E-47A3-9511-5D40FD0B958C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EDA7793-8E2E-47A3-9511-5D40FD0B958C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EDA7793-8E2E-47A3-9511-5D40FD0B958C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4A23671-2AE8-4A43-8A7D-841F16E1544C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4A23671-2AE8-4A43-8A7D-841F16E1544C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4A23671-2AE8-4A43-8A7D-841F16E1544C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4A23671-2AE8-4A43-8A7D-841F16E1544C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
