@@ -15,3 +15,7 @@
 ## 2.1.0
 
 * Add `CorrelationId` logical thread context property with correlation ID of message currently being handled
+
+## 3.0.0
+
+* Update to Rebus 3
