@@ -8,7 +8,6 @@ using log4net.Layout;
 using Rebus.Activation;
 using Rebus.Config;
 using Rebus.Handlers;
-using Rebus.Log4net;
 using Rebus.Transport.InMem;
 #pragma warning disable 1998
 

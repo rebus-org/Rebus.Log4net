@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using log4net;
-using Rebus.Config;
 using Rebus.Injection;
+using Rebus.Log4net;
 using Rebus.Pipeline;
 
-namespace Rebus.Log4net
+namespace Rebus.Config
 {
     /// <summary>
     /// Configuration extensions for setting up logging with Log4net
