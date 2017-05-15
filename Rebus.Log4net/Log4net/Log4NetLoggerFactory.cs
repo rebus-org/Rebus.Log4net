@@ -42,9 +42,9 @@ namespace Rebus
                 _logger.Warn(SafeFormat(message, objs));
             }
 
-            public void Error(Exception exception, string message, params object[] objs)
+            public void Warn(Exception exception, string message, params object[] objs)
             {
-                _logger.Error(SafeFormat(message, objs), exception);
+                _logger.Warn(SafeFormat(message, objs), exception);
             }
 
             public void Error(string message, params object[] objs)
@@ -52,8 +52,12 @@ namespace Rebus
                 _logger.Error(SafeFormat(message, objs));
             }
 
+            public void Error(Exception exception, string message, params object[] objs)
+            {
+                _logger.Error(SafeFormat(message, objs), exception);
+            }
+
             string SafeFormat(string message, object[] objs) => _loggerFactory.RenderString(message, objs);
         }
-
     }
 }
