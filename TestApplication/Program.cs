@@ -9,43 +9,42 @@ using Rebus.Activation;
 using Rebus.Config;
 using Rebus.Handlers;
 using Rebus.Transport.InMem;
+// ReSharper disable AccessToDisposedClosure
 #pragma warning disable 1998
 
 namespace TestApplication
 {
-    internal static class Program
+    static class Program
     {
-        private static void Main()
+        static void Main()
         {
             BasicConfigurator.Configure(new ConsoleAppender
             {
                 Layout = new PatternLayout("%timestamp [%thread] %level %logger %property{CorrelationId} - %message%newline")
             });
 
-            using (var activator = new BuiltinHandlerActivator())
-            {
-                activator.Register(() => new RealisticHandler());
+            using var activator = new BuiltinHandlerActivator();
 
-                Configure.With(activator)
-                    .Logging(l => l.Log4Net())
-                    .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "doesn't matter"))
-                    .Start();
+            activator.Register(() => new RealisticHandler());
 
-                using (var timer = new Timer(2000))
-                {
-                    timer.Elapsed += (sender, args) => activator.Bus.SendLocal("hello there");
-                    timer.Start();
+            Configure.With(activator)
+                .Logging(l => l.Log4Net())
+                .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "doesn't matter"))
+                .Start();
 
-                    Console.WriteLine("Press ENTER to quit");
-                    Console.ReadLine();
-                }
-            }
+            using var timer = new Timer(2000);
+
+            timer.Elapsed += (_, _) => activator.Bus.SendLocal("hello there");
+            timer.Start();
+
+            Console.WriteLine("Press ENTER to quit");
+            Console.ReadLine();
         }
     }
 
-    internal class RealisticHandler : IHandleMessages<string>
+    class RealisticHandler : IHandleMessages<string>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(RealisticHandler));
+        static readonly ILog Log = LogManager.GetLogger(typeof(RealisticHandler));
 
         public async Task Handle(string message)
         {
