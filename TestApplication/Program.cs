@@ -12,43 +12,42 @@ using Rebus.Transport.InMem;
 // ReSharper disable AccessToDisposedClosure
 #pragma warning disable 1998
 
-namespace TestApplication
+namespace TestApplication;
+
+static class Program
 {
-    static class Program
+    static void Main()
     {
-        static void Main()
+        BasicConfigurator.Configure(new ConsoleAppender
         {
-            BasicConfigurator.Configure(new ConsoleAppender
-            {
-                Layout = new PatternLayout("%timestamp [%thread] %level %logger %property{CorrelationId} - %message%newline")
-            });
+            Layout = new PatternLayout("%timestamp [%thread] %level %logger %property{CorrelationId} - %message%newline")
+        });
 
-            using var activator = new BuiltinHandlerActivator();
+        using var activator = new BuiltinHandlerActivator();
 
-            activator.Register(() => new RealisticHandler());
+        activator.Register(() => new RealisticHandler());
 
-            Configure.With(activator)
-                .Logging(l => l.Log4Net())
-                .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "doesn't matter"))
-                .Start();
+        Configure.With(activator)
+            .Logging(l => l.Log4Net())
+            .Transport(t => t.UseInMemoryTransport(new InMemNetwork(), "doesn't matter"))
+            .Start();
 
-            using var timer = new Timer(2000);
+        using var timer = new Timer(2000);
 
-            timer.Elapsed += (_, _) => activator.Bus.SendLocal("hello there");
-            timer.Start();
+        timer.Elapsed += (_, _) => activator.Bus.SendLocal("hello there");
+        timer.Start();
 
-            Console.WriteLine("Press ENTER to quit");
-            Console.ReadLine();
-        }
+        Console.WriteLine("Press ENTER to quit");
+        Console.ReadLine();
     }
+}
 
-    class RealisticHandler : IHandleMessages<string>
+class RealisticHandler : IHandleMessages<string>
+{
+    static readonly ILog Log = LogManager.GetLogger(typeof(RealisticHandler));
+
+    public async Task Handle(string message)
     {
-        static readonly ILog Log = LogManager.GetLogger(typeof(RealisticHandler));
-
-        public async Task Handle(string message)
-        {
-            Log.InfoFormat("Handling string message '{0}'", message);
-        }
+        Log.InfoFormat("Handling string message '{0}'", message);
     }
 }

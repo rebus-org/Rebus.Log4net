@@ -22,5 +22,7 @@
 ## 5.0.1
 * Update to Rebus 6, update log4net dependency to 2.0.14, update targets - thanks [daveabbot]
 
+## 6.0.0-alpha01
+* Update to Rebus 8
 
 [daveabbot]: https://github.com/daveabbot

@@ -4,29 +4,26 @@ using log4net;
 using Rebus.Messages;
 using Rebus.Pipeline;
 
-namespace Rebus.Log4net
+namespace Rebus.Log4net;
+
+class Log4NetContextStep : IIncomingStep
 {
-    class Log4NetContextStep : IIncomingStep
+    public async Task Process(IncomingStepContext context, Func<Task> next)
     {
-        public async Task Process(IncomingStepContext context, Func<Task> next)
+        var transportMessage = context.Load<TransportMessage>();
+
+        if (transportMessage.Headers.TryGetValue(Headers.CorrelationId, out var correlationId))
         {
-            var transportMessage = context.Load<TransportMessage>();
+            LogicalThreadContext.Properties["CorrelationId"] = correlationId;
+        }
 
-            string correlationId;
-
-            if (transportMessage.Headers.TryGetValue(Headers.CorrelationId, out correlationId))
-            {
-                LogicalThreadContext.Properties["CorrelationId"] = correlationId;
-            }
-
-            try
-            {
-                await next();
-            }
-            finally
-            {
-                LogicalThreadContext.Properties.Remove("CorrelationId");
-            }
+        try
+        {
+            await next();
+        }
+        finally
+        {
+            LogicalThreadContext.Properties.Remove("CorrelationId");
         }
     }
 }

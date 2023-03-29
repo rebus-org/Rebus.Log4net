@@ -1,47 +1,31 @@
 ﻿using System;
-using System.Reflection;
 using log4net;
-using Rebus.Injection;
 using Rebus.Log4net;
 using Rebus.Pipeline;
+// ReSharper disable EmptyGeneralCatchClause
 
-namespace Rebus.Config
+namespace Rebus.Config;
+
+/// <summary>
+/// Configuration extensions for setting up logging with Log4net
+/// </summary>
+public static class Log4NetConfigurationExtensions
 {
     /// <summary>
-    /// Configuration extensions for setting up logging with Log4net
+    /// Configures Rebus to use Log4Net for all of its internal logging, getting its loggers by calling logger <see cref="LogManager.GetLogger(Type)"/>
     /// </summary>
-    public static class Log4NetConfigurationExtensions
+    public static void Log4Net(this RebusLoggingConfigurer configurer)
     {
-        /// <summary>
-        /// Configures Rebus to use Log4Net for all of its internal logging, getting its loggers by calling logger <see cref="LogManager.GetLogger(Type)"/>
-        /// </summary>
-        public static void Log4Net(this RebusLoggingConfigurer configurer)
+        if (configurer == null) throw new ArgumentNullException(nameof(configurer));
+
+        configurer.Use(new Log4NetLoggerFactory());
+
+        configurer.Decorate<IPipeline>(c =>
         {
-            if (configurer == null) throw new ArgumentNullException(nameof(configurer));
+            var pipeline = c.Get<IPipeline>();
 
-            configurer.Use(new Log4NetLoggerFactory());
-
-            try
-            {
-                TryConfigurePipelineStep(configurer);
-            }
-            catch { }
-        }
-
-        static void TryConfigurePipelineStep(RebusLoggingConfigurer configurer)
-        {
-            var injectionistField = configurer.GetType()
-                .GetField("_injectionist", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            var injectionist = injectionistField?.GetValue(configurer) as Injectionist;
-
-            injectionist?.Decorate<IPipeline>(c =>
-            {
-                var pipeline = c.Get<IPipeline>();
-
-                return new PipelineStepConcatenator(pipeline)
-                    .OnReceive(new Log4NetContextStep(), PipelineAbsolutePosition.Front);
-            });
-        }
+            return new PipelineStepConcatenator(pipeline)
+                .OnReceive(new Log4NetContextStep(), PipelineAbsolutePosition.Front);
+        });
     }
 }
